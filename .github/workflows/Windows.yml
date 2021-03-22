@@ -31,9 +31,9 @@ jobs:
 
       - name: Copy Coverage
         run: pwsh .\Scripts\copy_coverage.ps1
-        
+
       - name: Upload coverage to Codacy
-        uses: codacy/cadacy-coverage-reporter-action@master
+        uses: codacy/codacy-coverage-reporter-action@master
         with:
           project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
           coverage-reports: coverage.xml
