@@ -22,18 +22,18 @@ namespace STools.Extensions
 
         public static List<string> CutInParts(this string Content, string Separator, int MaxCharacters)
         {
-            List<string> Parts = new List<string>();
+            List<string> Parts = new();
             string CurrentPart = "";
 
             foreach (string Section in Content.Split(Separator))
             {
                 if (CurrentPart.Length + Section.Length + Separator.Length > MaxCharacters) {
-                    Parts.Add(CurrentPart);
+                    Parts.Add(CurrentPart.Substring(0, CurrentPart.Length - Separator.Length));
                     CurrentPart = "";
                 }
                 CurrentPart += Section + Separator;
             }
-            Parts.Add(CurrentPart);
+            Parts.Add(CurrentPart.Substring(0, CurrentPart.Length - Separator.Length));
 
             return Parts;
         }
@@ -56,7 +56,5 @@ namespace STools.Extensions
 
             return ToClean;
         }
-
-
     }
 }

@@ -23,5 +23,17 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       
-      - name: build
+      - name: Build
         run: dotnet build --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --no-restore --verbosity normal --collect:"XPlat Code Coverage"
+
+      - name: Copy Coverage
+        run: pwsh .\Scripts\copy_coverage.ps1
+        
+      - name: Upload coverage to Codacy
+        uses: codacy/cadacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-reports: coverage.xml
