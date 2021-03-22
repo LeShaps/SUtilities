@@ -40,5 +40,13 @@ namespace SUtilitiesTests
             Assert.AreEqual("This sentence contains some things to remove", ToReplace.ReplaceAll("", "77", "3"));
             Assert.AreEqual("This sentence contains some things to 3remove", ToReplace.ReplaceAll("", "77", "33"));
         }
+
+        [TestMethod]
+        public void IsTests()
+        {
+            string ToTest = "Test";
+            Assert.IsTrue(ToTest.Is("Test"));
+            Assert.IsFalse(ToTest.Is("Not Test"));
+        }
     }
 }

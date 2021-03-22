@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
+using Newtonsoft.Json.Linq;
+using System.Linq;
 
 namespace STools
 {
@@ -91,6 +93,32 @@ namespace STools
             }
 
             return false;
+        }
+
+        public static T JsonWalker<T>(JObject OriginalJson, string Path)
+        {
+            if (Path is null)
+                throw new ArgumentNullException(nameof(Path));
+            else if (OriginalJson is null)
+                throw new ArgumentNullException(nameof(OriginalJson));
+
+            string[] SplitedPath = Path.Split('/');
+            string ValueName = SplitedPath.Last();
+            JObject FinalJson = OriginalJson;
+
+            foreach (string Part in SplitedPath.SkipLast(1))
+            {
+                if (FinalJson[Part].Type == JTokenType.Array)
+                {
+                    FinalJson = FinalJson.Value<JArray>(Part)[0].ToObject<JObject>();
+                }
+                else
+                {
+                    FinalJson = FinalJson[Part].ToObject<JObject>();
+                }
+            }
+
+            return FinalJson.Value<T>(ValueName);
         }
     }
 }

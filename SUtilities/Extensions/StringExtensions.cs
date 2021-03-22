@@ -56,5 +56,16 @@ namespace STools.Extensions
 
             return ToClean;
         }
+
+        public static bool Is(this string Compare, params string[] Comparaisons)
+        {
+            foreach (string comp in Comparaisons)
+            {
+                if (Compare == comp)
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

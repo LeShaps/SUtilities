@@ -9,5 +9,9 @@
     <RepositoryUrl>https://github.com/MrAchymist/SUtilities</RepositoryUrl>
     <RepositoryType>Github</RepositoryType>
   </PropertyGroup>
+  
+  <PropertyGroup>
+    <AnalysisMode>AllEnabledByDefault</AnalysisMode>
+  </PropertyGroup>
 
 </Project>
