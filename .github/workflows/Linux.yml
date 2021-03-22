@@ -25,5 +25,15 @@ jobs:
 
       - name: Build
         run: dotnet build --configuration Release --no-restore
+
       - name: Test
         run: dotnet test --no-restore --verbosity normal
+
+      - name: Copy Coverage
+        run: sh Scripts/copy_coverage.sh
+
+      - name: Upload to Codacy
+        uses: codacy/codacy-coverage-reporter-action@master
+        with:
+          project-token: ${{ secrets.CODACY_PROJECT_TOKEN }}
+          coverage-report: coverage.xml
