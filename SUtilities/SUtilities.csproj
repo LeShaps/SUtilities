@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>LeShaps</Authors>
+    <Company>ShapsWork</Company>
+    <Description>A series of utilities for formating, querying, or modifying</Description>
+    <PackageProjectUrl>https://github.com/MrAchymist/SUtilities</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/MrAchymist/SUtilities</RepositoryUrl>
+    <RepositoryType>Github</RepositoryType>
+  </PropertyGroup>
+
+</Project>
