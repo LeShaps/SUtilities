@@ -8,7 +8,7 @@ namespace STools.Extensions
         public static List<int> IndexesOf<T>(this List<T> List, T Comparison)
             where T : class
         {
-            List<int> Indexes = new List<int>();
+            List<int> Indexes = new();
 
             for (int i = 0; i < List.Count; i++) {
                 if (List[i] == Comparison)
@@ -20,7 +20,7 @@ namespace STools.Extensions
 
         public static List<int> IndexesOf<T>(this List<T> List, Func<T, bool> Predicate)
         {
-            List<int> Indexes = new List<int>();
+            List<int> Indexes = new();
 
             for (int i = 0; i < List.Count; i++) {
                 if (Predicate(List[i]))
