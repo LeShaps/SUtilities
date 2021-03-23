@@ -20,6 +20,9 @@ jobs:
         with:
           dotnet-version: '5.0.201'
 
+      - name: Clean
+        run: dotnet clean && dotnet nuget locals all --clear
+
       - name: Install dependencies
         run: dotnet restore
 
