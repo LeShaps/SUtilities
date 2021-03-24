@@ -1,5 +1,7 @@
+using System;
 using System.Globalization;
 using System.Linq;
+using System.Text;
 
 namespace STools.Extensions
 {
@@ -14,23 +16,36 @@ namespace STools.Extensions
         /// <returns></returns>
         public static string TrailingCharacters(this int nb, char Character, int Size)
         {
-            string nbString = nb.ToString(CultureInfo.InvariantCulture);
-            string NewString = "";
-            if (nbString.Length >= Size)
+            if (nb <= 0) {
+                throw new ArgumentException("Can't trail negative number", nameof(nb));
+            }
+
+            string nbString = $"{nb}";
+            StringBuilder NewString = new();
+
+            if (nbString.Length >= Size) {
                 return nbString;
-            else
-            {
-                for (int i = 0; i < Size - nbString.Length; i++)
-                    NewString += Character;
-                NewString += nbString;
-                return NewString;
+            }
+            else {
+                for (int i = 0; i < Size - nbString.Length; i++) {
+                    NewString.Append(Character);
+                }
+                NewString.Append(nbString);
+                return $"{NewString}";
             }
         }
 
         public static string StandardUppercase(this string ToUp)
         {
+            if (ToUp is null) {
+                throw new ArgumentNullException(nameof(ToUp));
+            }
+
             char UppedChar = char.ToUpperInvariant(ToUp[0]);
-            string Lowered = ToUp.Skip(1).ToString().ToLowerInvariant();
+#pragma warning disable CA1308 // Normalize strings to uppercase
+            string Lowered = string.Join("", ToUp.Skip(1))
+                                   .ToLowerInvariant();
+#pragma warning restore CA1308 // Normalize strings to uppercase
 
             return $"{UppedChar}{Lowered}";
         }

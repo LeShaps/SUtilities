@@ -39,8 +39,10 @@ namespace SUtilitiesTests
         public void ContainsTests()
         {
             string TestSentence = "This sentence could contains anything but not everyone";
+            string BuggySentence = null;
             Assert.IsTrue(TestSentence.Contains("This", "but", " "));
             Assert.IsFalse(TestSentence.Contains("nothing", "no one"));
+            Assert.ThrowsException<ArgumentNullException>(() => BuggySentence.Contains("nothing", "no one"));
         }
 
         [TestMethod]

@@ -16,8 +16,9 @@ namespace STools.Extensions
 
             foreach (char c in Word)
             {
-                if (char.IsLetter(c))
+                if (char.IsLetter(c)) {
                     Result.Append(c);
+                }
             }
 
             return $"{Result}";
@@ -57,8 +58,9 @@ namespace STools.Extensions
 
             foreach (string s in Contained)
             {
-                if (FullString.Contains(s, StringComparison.InvariantCulture))
+                if (FullString.Contains(s, StringComparison.InvariantCulture)) {
                     continue;
+                }
                 return false;
             }
 
@@ -85,10 +87,10 @@ namespace STools.Extensions
         {
             foreach (string comp in Comparaisons)
             {
-                if (Compare == comp)
+                if (Compare == comp) {
                     return true;
+                }
             }
-
             return false;
         }
     }

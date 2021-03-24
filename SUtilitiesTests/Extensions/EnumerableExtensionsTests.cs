@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 
 using STools.Extensions;
+using System;
 
-namespace SUtilitiesTests.Extensions
+namespace SUtilitiesTests
 {
     [TestClass]
     public class EnumerableExtensionsTests
@@ -26,6 +27,8 @@ namespace SUtilitiesTests.Extensions
                 64
             };
 
+            List<string> NullList = null;
+
             SomeList.AddUnique("One");
             Assert.AreEqual(4, SomeList.Count);
             SomeList.AddUnique("Here");
@@ -35,6 +38,7 @@ namespace SUtilitiesTests.Extensions
             Assert.AreEqual(4, IntList.Count);
             IntList.AddUnique(5);
             Assert.AreEqual(5, IntList.Count);
+            Assert.ThrowsException<ArgumentNullException>(() => NullList.AddUnique("String"));
         }
     }
 }
