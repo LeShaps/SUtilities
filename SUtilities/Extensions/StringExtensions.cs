@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Text;
+using System;
 
 namespace STools.Extensions
 {
@@ -6,42 +8,58 @@ namespace STools.Extensions
     {
         public static string ToWordOnly(this string Word)
         {
-            string Result = "";
+            StringBuilder Result = new();
 
-            if (string.IsNullOrEmpty(Word))
-                return Word;
+            if (string.IsNullOrEmpty(Word)) {
+                throw new ArgumentException("The string was null or empty", nameof(Word));
+            }
 
             foreach (char c in Word)
             {
                 if (char.IsLetter(c))
-                    Result += c;
+                    Result.Append(c);
             }
 
-            return Result;
+            return $"{Result}";
         }
 
-        public static List<string> CutInParts(this string Content, string Separator, int MaxCharacters)
+        public static ICollection<string> CutInParts(this string Content, string Separator, int MaxCharacters)
         {
             List<string> Parts = new();
-            string CurrentPart = "";
+            StringBuilder CurrentPart = new();
+
+            if (Content is null) {
+                throw new ArgumentNullException(nameof(Content));
+            } else if (Separator is null) {
+                throw new ArgumentNullException(nameof(Separator));
+            } else if (MaxCharacters <= 0) {
+                throw new ArgumentOutOfRangeException(nameof(MaxCharacters), "Max Characters must be superior to 0");
+            }
 
             foreach (string Section in Content.Split(Separator))
             {
                 if (CurrentPart.Length + Section.Length + Separator.Length > MaxCharacters) {
-                    Parts.Add(CurrentPart.Substring(0, CurrentPart.Length - Separator.Length));
-                    CurrentPart = "";
+                    Parts.Add(CurrentPart.ToString(0, CurrentPart.Length - Separator.Length));
+                    CurrentPart.Clear();
                 }
-                CurrentPart += Section + Separator;
+                CurrentPart.Append(Section + Separator);
             }
-            Parts.Add(CurrentPart.Substring(0, CurrentPart.Length - Separator.Length));
+            Parts.Add(CurrentPart.ToString(0, CurrentPart.Length - Separator.Length));
 
             return Parts;
         }
 
-        public static bool Contains(this string String, params string[] Contained)
+        public static bool Contains(this string FullString, params string[] Contained)
         {
-            foreach (string s in Contained) {
-                if (!String.Contains(s)) return false;
+            if (FullString is null) {
+                throw new ArgumentNullException(nameof(FullString));
+            }
+
+            foreach (string s in Contained)
+            {
+                if (FullString.Contains(s, StringComparison.InvariantCulture))
+                    continue;
+                return false;
             }
 
             return true;
@@ -49,9 +67,15 @@ namespace STools.Extensions
 
         public static string ReplaceAll(this string ToClean, string Replacement, params string[] ToReplace)
         {
+            if (ToClean is null) {
+                throw new ArgumentNullException(nameof(ToClean));
+            } else if (Replacement is null) {
+                throw new ArgumentNullException(nameof(Replacement));
+            }
+
             foreach (string ToRep in ToReplace)
             {
-                ToClean = ToClean.Replace(ToRep, Replacement);
+                ToClean = ToClean.Replace(ToRep, Replacement, StringComparison.InvariantCulture);
             }
 
             return ToClean;
