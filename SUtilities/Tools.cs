@@ -6,31 +6,39 @@ using System.Text.RegularExpressions;
 using Newtonsoft.Json.Linq;
 using System.Linq;
 
+[assembly:CLSCompliant(true)]
+
 namespace STools
 {
     public static class Tools
     {
         public static void CheckDir(string Path)
         {
-            if (string.IsNullOrEmpty(Path))
-                return;
+
+            if (string.IsNullOrEmpty(Path)) {
+                throw new ArgumentNullException(nameof(Path), "Path cannot be null or emtpy");
+            }
 
             string[] List = Path.Split('/');
             for (int i = 0; i <= List.Length; i++)
             {
-                if (!Directory.Exists(List[i]))
+                if (!Directory.Exists(List[i])) {
                     Directory.CreateDirectory(List[i]);
-                if (i + 1 < List.Length)
+                }
+
+                if (i + 1 < List.Length) {
                     List[i + 1] = List[i] + "/" + List[i + 1];
+                }
             }
         }
 
         public static void DeleteDirectoryContent(string Path)
         {
-            foreach (string f in Directory.GetFiles(Path))
+            foreach (string f in Directory.GetFiles(Path)) {
                 File.Delete(f);
-            foreach (string d in Directory.GetDirectories(Path))
-            {
+            }
+
+            foreach (string d in Directory.GetDirectories(Path)) {
                 DeleteDirectoryContent(d);
                 Directory.Delete(d);
             }
@@ -38,8 +46,9 @@ namespace STools
 
         public static string Clarify(string WebString)
         {
-            if (string.IsNullOrEmpty(WebString))
-                return null;
+            if (string.IsNullOrEmpty(WebString)) {
+                throw new ArgumentNullException(nameof(WebString), "String cannot be null or empty");
+            }
 
             return GetPlainTextFromHtml(WebUtility.HtmlDecode(WebString));
         }
@@ -51,8 +60,9 @@ namespace STools
         /// <returns>The plain text of the HTML string</returns>
         public static string GetPlainTextFromHtml(string htmlString)
         {
-            if (string.IsNullOrEmpty(htmlString))
-                return null;
+            if (string.IsNullOrEmpty(htmlString)) {
+                throw new ArgumentNullException(nameof(htmlString), "String cannot be null or empty");
+            }
 
             const string htmlTagPattern = "<.*?>";
             var regexCss = new Regex("(\\<script(.+?)\\</script\\>)|(\\<style(.+?)\\</style\\>)", RegexOptions.Singleline | RegexOptions.IgnoreCase);
@@ -66,20 +76,30 @@ namespace STools
 
         public static Stream GetStreamFromUrl(Uri Url)
         {
+            if (Url is null) {
+                throw new ArgumentNullException(nameof(Url));
+            }
+
             byte[] Data = null;
 
-            using (var wc = new WebClient())
+            using (var wc = new WebClient()) {
                 Data = wc.DownloadData(Url);
+            }
 
             return new MemoryStream(Data);
         }
 
         public static async Task<Stream> GetStreamFromUrlAsync(Uri Url)
         {
+            if (Url is null) {
+                throw new ArgumentNullException(nameof(Url));
+            }
+
             byte[] Data = null;
 
-            using (var wc = new WebClient())
-                Data = await wc.DownloadDataTaskAsync(Url);
+            using (var wc = new WebClient()) {
+                Data = await wc.DownloadDataTaskAsync(Url).ConfigureAwait(false);
+            }
 
             return new MemoryStream(Data);
         }
@@ -88,8 +108,9 @@ namespace STools
         {
             foreach (string s in Args)
             {
-                if (string.IsNullOrEmpty(s))
+                if (string.IsNullOrEmpty(s)) {
                     return true;
+                }
             }
 
             return false;
@@ -97,10 +118,12 @@ namespace STools
 
         public static T JsonWalker<T>(JObject OriginalJson, string Path)
         {
-            if (Path is null)
+            if (Path is null) {
                 throw new ArgumentNullException(nameof(Path));
-            else if (OriginalJson is null)
+            }
+            else if (OriginalJson is null) {
                 throw new ArgumentNullException(nameof(OriginalJson));
+            }
 
             string[] SplitedPath = Path.Split('/');
             string ValueName = SplitedPath.Last();
@@ -108,12 +131,9 @@ namespace STools
 
             foreach (string Part in SplitedPath.SkipLast(1))
             {
-                if (FinalJson[Part].Type == JTokenType.Array)
-                {
+                if (FinalJson[Part].Type == JTokenType.Array) {
                     FinalJson = FinalJson.Value<JArray>(Part)[0].ToObject<JObject>();
-                }
-                else
-                {
+                } else {
                     FinalJson = FinalJson[Part].ToObject<JObject>();
                 }
             }
