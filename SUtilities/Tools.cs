@@ -20,7 +20,7 @@ namespace STools
             }
 
             string[] List = Path.Split('/');
-            for (int i = 0; i <= List.Length; i++)
+            for (int i = 0; i < List.Length; i++)
             {
                 if (!Directory.Exists(List[i])) {
                     Directory.CreateDirectory(List[i]);
@@ -34,6 +34,10 @@ namespace STools
 
         public static void DeleteDirectoryContent(string Path)
         {
+            if (string.IsNullOrEmpty(Path)) {
+                throw new ArgumentNullException(nameof(Path), "The path must not be valid");
+            }
+
             foreach (string f in Directory.GetFiles(Path)) {
                 File.Delete(f);
             }
